@@ -38,6 +38,16 @@ class StudentController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'name'     => 'required|regex:/^[a-zA-Z\s\-]+$/|max:255',
+            'address' => 'required|string|min:20|not_regex:/^[0-9\s]+$/',
+            'mobile' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+        ], [
+            'name.regex'         => 'The course name should only contain letters and spaces.',
+            'syllabus.min'       => 'Please provide a more detailed syllabus (at least 20 characters).',
+            'syllabus.not_regex' => 'The syllabus cannot consist of only numbers.',
+            'duration.regex'     => 'Duration should be like "6 Months" or "12 Weeks".',
+        ]);
         // Get all data sent from the form (Name, Address, Mobile, etc.)
         $input = $request->all();
         
