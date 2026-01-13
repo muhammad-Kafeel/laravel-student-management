@@ -1,104 +1,88 @@
-@extends('layout')
-@section('content')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-<div class="row">
-    <div class="col-12 mb-4">
-        <h2 class="font-weight-bold">System Overview</h2>
-        <p class="text-muted">Welcome back! Here is a summary of your school management data.</p>
-    </div>
-</div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Welcome Message -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6 text-gray-900">
+                    <h3 class="text-2xl font-bold mb-2">Welcome, {{ Auth::user()->name }}!</h3>
+                    <p class="text-gray-600">You're logged in successfully.</p>
+                </div>
+            </div>
 
-<div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm" style="border-left: 5px solid #2563eb !important;">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="rounded-circle bg-light p-3 mr-3">
-                        <i class="fas fa-user-graduate text-primary fa-lg"></i>
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Students Card -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-blue-100 rounded-full p-3">
+                                <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Students</p>
+                                <p class="text-3xl font-bold text-gray-900">{{ $studentCount }}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a href="{{ url('/students') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                View all students →
+                            </a>
+                        </div>
                     </div>
-                    <div>
-                        <div class="text-muted small font-weight-bold text-uppercase">Total Students</div>
-                        <h3 class="mb-0 font-weight-bold">{{ $studentCount ?? 0 }}</h3>
+                </div>
+
+                <!-- Teachers Card -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-100 rounded-full p-3">
+                                <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Teachers</p>
+                                <p class="text-3xl font-bold text-gray-900">{{ $teacherCount }}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a href="{{ url('/teachers') }}" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                                View all teachers →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Courses Card -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-purple-100 rounded-full p-3">
+                                <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Courses</p>
+                                <p class="text-3xl font-bold text-gray-900">{{ $courseCount }}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a href="{{ url('/courses') }}" class="text-purple-600 hover:text-purple-800 text-sm font-medium">
+                                View all courses →
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm" style="border-left: 5px solid #10b981 !important;">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="rounded-circle bg-light p-3 mr-3">
-                        <i class="fas fa-chalkboard-teacher text-success fa-lg"></i>
-                    </div>
-                    <div>
-                        <div class="text-muted small font-weight-bold text-uppercase">Active Teachers</div>
-                        <h3 class="mb-0 font-weight-bold">{{$teacherCount ?? 0}}</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm" style="border-left: 5px solid #f59e0b !important;">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="rounded-circle bg-light p-3 mr-3">
-                        <i class="fas fa-book text-warning fa-lg"></i>
-                    </div>
-                    <div>
-                        <div class="text-muted small font-weight-bold text-uppercase">Total Courses</div>
-                        <h3 class="mb-0 font-weight-bold">{{ $courseCount ?? 0 }}</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-2">
-    <div class="col-lg-8 mb-4">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-header bg-white font-weight-bold border-0 pt-4 px-4">
-                <i class="fas fa-rocket mr-2 text-primary"></i> Getting Started
-            </div>
-            <div class="card-body px-4">
-                <p>Welcome to your new Student Management System. To get started, you can perform the following actions:</p>
-                <div class="list-group list-group-flush">
-                    <a href="{{ url('/students/create') }}" class="list-group-item list-group-item-action border-0 px-0">
-                        <i class="fas fa-plus-circle mr-2 text-primary"></i> Register a new student in the database
-                    </a>
-                    <a href="{{ url('/students') }}" class="list-group-item list-group-item-action border-0 px-0">
-                        <i class="fas fa-list mr-2 text-primary"></i> View and manage existing student records
-                    </a>
-                    <a href="{{ url('/teachers/create') }}" class="list-group-item list-group-item-action border-0 px-0">
-                        <i class="fas fa-plus-circle mr-2 text-primary"></i> Register a new teacher in the database
-                    </a>
-                    <a href="{{ url('/teachers') }}" class="list-group-item list-group-item-action border-0 px-0">
-                        <i class="fas fa-list mr-2 text-primary"></i> View and manage existing Teachers records
-                    </a>
-                    <a href="{{ url('/courses/create') }}" class="list-group-item list-group-item-action border-0 px-0">
-                        <i class="fas fa-plus-circle mr-2 text-primary"></i> Register a new Course in the database
-                    </a>
-                    <a href="{{ url('/courses') }}" class="list-group-item list-group-item-action border-0 px-0">
-                        <i class="fas fa-list mr-2 text-primary"></i> View and manage existing Course records
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-lg-4 mb-4">
-        <div class="card border-0 shadow-sm bg-dark text-white h-100">
-            <div class="card-body d-flex flex-column justify-content-center text-center p-4">
-                <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
-                <h5 class="font-weight-bold">System Secure</h5>
-                <p class="small opacity-75">All data is backed up daily and secured with Laravel's built-in encryption.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-@endsection
+</x-app-layout>

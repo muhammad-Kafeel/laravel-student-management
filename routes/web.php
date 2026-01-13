@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-// --- Controller Imports ---
+// --- Your Original Controller Imports ---
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\StudentController; // Removed the leading backslash
+use App\Http\Controllers\StudentController;
 
 // --- Model Imports ---
 use App\Models\Course;
@@ -13,26 +14,37 @@ use App\Models\Teacher;
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard Route
+| Web Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    // 1. Fetch counts for the dashboard stats
-    $studentCount = Student::count(); 
-    $teacherCount = Teacher::count();
-    $courseCount  = Course::count(); // Renamed for consistency
 
-    // 2. Pass data to the dashboard view
-    return view('dashboard', compact('studentCount', 'teacherCount', 'courseCount'));
+// Welcome Page (Public)
+Route::get('/', function () {
+    return view('welcome');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Resource Routes (CRUD)
-|--------------------------------------------------------------------------
-| These single lines automatically create index, create, store, show, edit, update, 
-| and destroy routes for each module.
-*/
-Route::resource('/students', StudentController::class);
-Route::resource('/teachers', TeacherController::class);
-Route::resource('/courses', CourseController::class);
+// Dashboard Route (Protected - Requires Login)
+Route::get('/dashboard', function () {
+    // Fetch counts for the dashboard stats
+    $studentCount = Student::count(); 
+    $teacherCount = Teacher::count();
+    $courseCount  = Course::count();
+
+    // Pass data to the dashboard view
+    return view('dashboard', compact('studentCount', 'teacherCount', 'courseCount'));
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// Profile Routes (Protected - Requires Login)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Your Original Resource Routes (Now Protected!)
+    Route::resource('/students', StudentController::class);
+    Route::resource('/teachers', TeacherController::class);
+    Route::resource('/courses', CourseController::class);
+});
+
+// Authentication Routes (Login, Register, etc.)
+require __DIR__.'/auth.php';
