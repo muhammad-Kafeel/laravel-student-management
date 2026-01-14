@@ -6,11 +6,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\EnrollmentController;
 
 // --- Model Imports ---
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\Enrollment;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,9 +32,10 @@ Route::get('/dashboard', function () {
     $studentCount = Student::count(); 
     $teacherCount = Teacher::count();
     $courseCount  = Course::count();
+    $enrollmentCount = Enrollment::count();
 
     // Pass data to the dashboard view
-    return view('dashboard', compact('studentCount', 'teacherCount', 'courseCount'));
+    return view('dashboard', compact('studentCount', 'teacherCount', 'courseCount', 'enrollmentCount'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Profile Routes (Protected - Requires Login)
@@ -44,6 +48,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('/students', StudentController::class);
     Route::resource('/teachers', TeacherController::class);
     Route::resource('/courses', CourseController::class);
+    
+    // Enrollment Routes
+    Route::resource('/enrollments', EnrollmentController::class);
+});
+
+// Admin Only Routes (Protected - Requires Admin Role)
+Route::middleware(['auth', 'admin'])->group(function () {
+    // User Management Routes (Admin Panel)
+    Route::resource('/users', UserController::class);
 });
 
 // Authentication Routes (Login, Register, etc.)

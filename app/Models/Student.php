@@ -12,4 +12,22 @@ class Student extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['name','address','mobile'];
     
+    /**
+     * Relationship: Student has many Enrollments
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    /**
+     * Relationship: Student belongs to many Courses (through enrollments)
+     * This is theMany-to-Many relationship!
+     */
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'enrollments')
+                    ->withPivot('enrollment_date', 'status')
+                    ->withTimestamps();
+    }
 }
