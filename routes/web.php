@@ -48,15 +48,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('/students', StudentController::class);
     Route::resource('/teachers', TeacherController::class);
     Route::resource('/courses', CourseController::class);
-    
-    // Enrollment Routes
-    Route::resource('/enrollments', EnrollmentController::class);
 });
 
 // Admin Only Routes (Protected - Requires Admin Role)
 Route::middleware(['auth', 'admin'])->group(function () {
     // User Management Routes (Admin Panel)
     Route::resource('/users', UserController::class);
+    
+    // Enrollment Management (Admin Only)
+    Route::resource('/enrollments', EnrollmentController::class);
 });
 
 // Authentication Routes (Login, Register, etc.)

@@ -24,10 +24,10 @@
                     <x-nav-link :href="url('/courses')" :active="request()->is('courses*')">
                         {{ __('Courses') }}
                     </x-nav-link>
-                    <x-nav-link :href="url('/enrollments')" :active="request()->is('enrollments*')">
-                        {{ __('Enrollments') }}
-                    </x-nav-link>
                     @if(Auth::user()->isAdmin())
+                        <x-nav-link :href="url('/enrollments')" :active="request()->is('enrollments*')">
+                            {{ __('Enrollments') }}
+                        </x-nav-link>
                         <x-nav-link :href="url('/users')" :active="request()->is('users*')">
                             {{ __('Users') }}
                         </x-nav-link>
@@ -96,10 +96,10 @@
             <x-responsive-nav-link :href="url('/courses')" :active="request()->is('courses*')">
                 {{ __('Courses') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="url('/enrollments')" :active="request()->is('enrollments*')">
-                {{ __('Enrollments') }}
-            </x-responsive-nav-link>
             @if(Auth::user()->isAdmin())
+                <x-responsive-nav-link :href="url('/enrollments')" :active="request()->is('enrollments*')">
+                    {{ __('Enrollments') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="url('/users')" :active="request()->is('users*')">
                     {{ __('Users') }}
                 </x-responsive-nav-link>
