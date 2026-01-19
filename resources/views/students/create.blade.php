@@ -6,7 +6,7 @@
 
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-transparent p-0 mb-3">
-                    <li class="breadcrumb-item"><a href="{{ url('/student') }}">Students</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/students') }}">Students</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Add New Student</li>
                 </ol>
             </nav>
