@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-7">
+    <div class="col-md-10">
         
         <div class="d-flex justify-content-between align-items-center mb-4">
             <nav aria-label="breadcrumb">
@@ -16,63 +16,130 @@
             </a>
         </div>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-primary py-5 text-center position-relative" style="border-radius: 12px 12px 0 0;">
-                <div class="position-absolute w-100" style="bottom: -40px; left: 0;">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($students->name) }}&background=f8fafc&color=2563eb&size=80" 
-                         class="rounded-circle border border-white shadow" 
-                         alt="Avatar"
-                         style="width: 80px; height: 80px; border-width: 4px !important;">
+        <div class="row">
+            <!-- Student Info Card -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-primary py-5 text-center position-relative" style="border-radius: 12px 12px 0 0;">
+                        <div class="position-absolute w-100" style="bottom: -40px; left: 0;">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($students->name) }}&background=f8fafc&color=2563eb&size=80" 
+                                 class="rounded-circle border border-white shadow" 
+                                 alt="Avatar"
+                                 style="width: 80px; height: 80px; border-width: 4px !important;">
+                        </div>
+                    </div>
+
+                    <div class="card-body pt-5 mt-3 px-4 pb-4">
+                        <div class="text-center mb-4">
+                            <h4 class="font-weight-bold mb-1">{{ $students->name }}</h4>
+                            <p class="text-muted small"><i class="fas fa-id-badge mr-1"></i> Student ID: #{{ $students->id }}</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="p-3 bg-light rounded shadow-sm">
+                                <label class="text-muted small font-weight-bold text-uppercase mb-1 d-block">Contact Number</label>
+                                <div class="font-weight-bold text-dark">
+                                    <i class="fas fa-phone-alt text-primary mr-2"></i> {{ $students->mobile }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="p-3 bg-light rounded shadow-sm">
+                                <label class="text-muted small font-weight-bold text-uppercase mb-1 d-block">Location</label>
+                                <div class="font-weight-bold text-dark">
+                                    <i class="fas fa-map-marker-alt text-primary mr-2"></i> {{ $students->address }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="p-3 bg-light rounded shadow-sm">
+                                <label class="text-muted small font-weight-bold text-uppercase mb-1 d-block">Joined Date</label>
+                                <div class="font-weight-bold text-dark">
+                                    <i class="fas fa-calendar-alt text-primary mr-2"></i> {{ $students->created_at->format('M d, Y') }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="p-3 bg-light rounded shadow-sm">
+                                <label class="text-muted small font-weight-bold text-uppercase mb-1 d-block">Status</label>
+                                <span class="badge badge-success px-3 py-2">Active</span>
+                            </div>
+                        </div>
+
+                        <a href="{{ url('/students') }}" class="btn btn-outline-secondary btn-block">
+                            <i class="fas fa-arrow-left mr-2"></i> Back to List
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="card-body pt-5 mt-3 px-4 pb-5">
-                <div class="text-center mb-5">
-                    <h3 class="font-weight-bold mb-1">{{ $students->name }}</h3>
-                    <p class="text-muted small"><i class="fas fa-id-badge mr-1"></i> Student ID: #{{ $students->id }}</p>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-6 mb-4">
-                        <div class="p-3 bg-light rounded shadow-sm h-100">
-                            <label class="text-muted small font-weight-bold text-uppercase mb-1 d-block">Contact Number</label>
-                            <div class="h6 mb-0 font-weight-bold text-dark">
-                                <i class="fas fa-phone-alt text-primary mr-2"></i> {{ $students->mobile }}
+            <!-- Enrolled Courses Card -->
+            <div class="col-md-8 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0 font-weight-bold"><i class="fas fa-book mr-2 text-primary"></i>Enrolled Courses</h5>
+                                <p class="text-muted small mb-0">Courses this student is currently enrolled in</p>
                             </div>
+                            <span class="badge badge-primary badge-pill px-3 py-2">
+                                {{ $students->courses->count() }} Course{{ $students->courses->count() != 1 ? 's' : '' }}
+                            </span>
                         </div>
                     </div>
-                    <div class="col-sm-6 mb-4">
-                        <div class="p-3 bg-light rounded shadow-sm h-100">
-                            <label class="text-muted small font-weight-bold text-uppercase mb-1 d-block">Location</label>
-                            <div class="h6 mb-0 font-weight-bold text-dark text-truncate">
-                                <i class="fas fa-map-marker-alt text-primary mr-2"></i> {{ $students->address }}
+
+                    <div class="card-body">
+                        @if($students->courses->count() > 0)
+                            <div class="list-group list-group-flush">
+                                @foreach($students->courses as $course)
+                                    <div class="list-group-item border rounded mb-3 shadow-sm">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="flex-grow-1">
+                                                <h6 class="font-weight-bold mb-2">{{ $course->name }}</h6>
+                                                <p class="text-muted small mb-2">
+                                                    <strong>Duration:</strong> {{ $course->duration }}
+                                                </p>
+                                                <p class="text-muted small mb-2">
+                                                    <strong>Syllabus:</strong> {{ Str::limit($course->syllabus, 120) }}
+                                                </p>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-calendar-check mr-1"></i>
+                                                        <strong>Enrolled:</strong> {{ \Carbon\Carbon::parse($course->pivot->enrollment_date)->format('M d, Y') }}
+                                                    </small>
+                                                    <small class="ml-3">
+                                                        <strong>Status:</strong> 
+                                                        @if($course->pivot->status == 'active')
+                                                            <span class="badge badge-success">Active</span>
+                                                        @elseif($course->pivot->status == 'completed')
+                                                            <span class="badge badge-primary">Completed</span>
+                                                        @else
+                                                            <span class="badge badge-danger">Dropped</span>
+                                                        @endif
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                        </div>
+                        @else
+                            <div class="text-center py-5">
+                                <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+                                <h5 class="font-weight-bold">No Enrolled Courses</h5>
+                                <p class="text-muted">This student is not enrolled in any courses yet.</p>
+                                @if(Auth::user()->isAdmin())
+                                    <a href="{{ url('/enrollments/create') }}" class="btn btn-primary mt-3">
+                                        <i class="fas fa-plus mr-2"></i> Enroll in Course
+                                    </a>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
-
-                <hr class="my-4 opacity-50">
-
-                <div class="row text-center">
-                    <div class="col-4">
-                        <div class="small text-muted mb-1">Status</div>
-                        <span class="badge badge-pill badge-success px-3 py-2">Active</span>
-                    </div>
-                    <div class="col-4 border-left border-right">
-                        <div class="small text-muted mb-1">Joined Date</div>
-                        <div class="font-weight-bold small text-dark">{{ $students->created_at->format('d M, Y') }}</div>
-                    </div>
-                    <div class="col-4">
-                        <div class="small text-muted mb-1">Courses</div>
-                        <div class="font-weight-bold small text-dark">0 Enrolled</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-footer bg-white border-top-0 pb-4 px-4 text-center">
-                <a href="{{ url('/students') }}" class="btn btn-outline-secondary btn-sm px-4">
-                    <i class="fas fa-arrow-left mr-2"></i> Back to List
-                </a>
             </div>
         </div>
     </div>
@@ -82,7 +149,6 @@
     .breadcrumb-item a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
     .breadcrumb-item.active { color: #64748b; font-weight: 500; }
     .bg-light { background-color: #f1f5f9 !important; }
-    .badge-soft-success { background-color: #dcfce7; color: #15803d; }
 </style>
 
 @endsection

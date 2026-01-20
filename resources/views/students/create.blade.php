@@ -22,19 +22,47 @@
                     <form action="{{ url('students') }}" method="post">
                         {!! csrf_field() !!}
 
-                        {{-- Global Alert for general messages --}}
-                        <x-alert />
-
                         {{-- Full Name --}}
-                        <x-student-input name="name" label="Full Name" icon="far fa-user" placeholder="e.g. John Doe" />
+                        <div class="form-group mb-4">
+                            <label class="font-weight-600">Full Name</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light"><i class="far fa-user"></i></span>
+                                </div>
+                                <input type="text" name="name" id="name" value="{{ old('name') }}" class="form-control" placeholder="e.g. John Doe" required>
+                            </div>
+                            @error('name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
                         {{-- Address --}}
-                        <x-student-input name="address" label="Residential Address" icon="fas fa-map-marker-alt"
-                            placeholder="e.g. 123 Street, City" />
+                        <div class="form-group mb-4">
+                            <label class="font-weight-600">Residential Address</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light"><i class="fas fa-map-marker-alt"></i></span>
+                                </div>
+                                <input type="text" name="address" id="address" value="{{ old('address') }}" class="form-control" placeholder="e.g. 123 Street, City" required>
+                            </div>
+                            @error('address')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
                         {{-- Mobile --}}
-                        <x-student-input name="mobile" label="Mobile Number" icon="fas fa-phone-alt"
-                            placeholder="e.g. +1 234 567 890" />
+                        <div class="form-group mb-4">
+                            <label class="font-weight-600">Mobile Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light"><i class="fas fa-phone-alt"></i></span>
+                                </div>
+                                <input type="text" name="mobile" id="mobile" value="{{ old('mobile') }}" class="form-control" placeholder="e.g. +92 300 1234567" required>
+                            </div>
+                            @error('mobile')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
                         <hr class="my-4">
 

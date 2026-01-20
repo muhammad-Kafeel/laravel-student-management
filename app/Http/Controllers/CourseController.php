@@ -64,7 +64,7 @@ public function show(string $id): View
     $course = Course::find($id);
 
     // 2. Return the 'show.blade.php' view with that one course's data
-    return view('courses.show')->with('courses', $course);
+    return view('courses.show')->with('course', $course);
 }
 
     /**
@@ -77,7 +77,7 @@ public function show(string $id): View
         $course = Course::find($id);
 
         // 2. Send that data to 'edit.blade.php'
-        return view('courses.edit')->with('courses', $course);
+        return view('courses.edit')->with('course', $course);
     }
 
     /**
@@ -100,7 +100,7 @@ public function show(string $id): View
 
     /**
      * Delete a specific course permanently.
-     * Accessible via: DELETE /courses/{id}
+     * Accessible via: DELETE /course/{id}
      */
   /**
      * Delete a specific course.
@@ -114,6 +114,6 @@ public function show(string $id): View
         $course->delete();
 
         // 3. Send the user back to the list so the table refreshes
-        return redirect('courses')->with('flash_message', 'Course deleted successfully!');
+        return redirect('course')->with('flash_message', 'Course deleted successfully!');
     }
 }

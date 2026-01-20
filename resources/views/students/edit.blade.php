@@ -73,7 +73,7 @@
 <style>
     .font-weight-600 { font-weight: 600; color: #334155; margin-bottom: 8px; display: inline-block; }
     .form-control:focus {
-        border-color: #f59e0b; /* Warning color for editing */
+        border-color: #f59e0b;
         box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
     }
 </style>
