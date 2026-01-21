@@ -8,6 +8,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\AttendanceController;
 
 // --- Model Imports ---
 use App\Models\Course;
@@ -91,6 +92,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     
     // Enrollment Management (Admin Only)
     Route::resource('/enrollments', EnrollmentController::class);
+    
+    // Attendance Management (Admin Only)
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/mark', [AttendanceController::class, 'create'])->name('attendance.create');
+    Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+    Route::get('/attendance/{course}', [AttendanceController::class, 'show'])->name('attendance.show');
 });
 
 // Authentication Routes (Login, Register, etc.)

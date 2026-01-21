@@ -28,6 +28,9 @@
                         <x-nav-link :href="url('/enrollments')" :active="request()->is('enrollments*')">
                             {{ __('Enrollments') }}
                         </x-nav-link>
+                        <x-nav-link :href="url('/attendance')" :active="request()->is('attendance*')">
+                            {{ __('Attendance') }}
+                        </x-nav-link>
                         <x-nav-link :href="url('/users')" :active="request()->is('users*')">
                             {{ __('Users') }}
                         </x-nav-link>
