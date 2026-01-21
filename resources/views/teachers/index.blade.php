@@ -9,9 +9,11 @@
             <h5 class="mb-0 font-weight-bold text-dark">
               <i class="fas fa-chalkboard-teacher mr-2 text-success"></i>Teacher Management
             </h5>
-            <a href="{{ url('/teachers/create') }}" class="btn btn-success shadow-sm">
-              <i class="fa fa-plus"></i> Add New Teacher
-            </a>
+            @if(Auth::user()->isAdmin())
+              <a href="{{ url('/teachers/create') }}" class="btn btn-success shadow-sm">
+                <i class="fa fa-plus"></i> Add New Teacher
+              </a>
+            @endif
           </div>
 
           <div class="card-body p-0">
@@ -28,7 +30,6 @@
                 </thead>
                 <tbody>
                   @foreach ($teachers as $teach)
-
                     <tr>
                       <td class="px-4 text-muted">{{ $loop->iteration }}</td>
                       <td><strong>{{ $teach->name }}</strong></td>
@@ -36,17 +37,27 @@
                       <td>{{ $teach->mobile }}</td>
                       <td class="text-center">
                         <div class="btn-group" role="group">
-                          <a href="{{ url('/teachers/'.$teach->id) }}" class="btn btn-sm btn-outline-info" title="View"><i class="fa fa-eye"></i></a>
+                          <a href="{{ url('/teachers/'.$teach->id) }}" class="btn btn-sm btn-outline-info" title="View">
+                            <i class="fa fa-eye"></i>
+                          </a>
 
-                          <a href="{{ url('/teachers/'.$teach->id.'/edit') }}" class="btn btn-sm btn-outline-primary" title="Edit"><i
-                              class="fa fa-pencil-alt"></i></a>
+                          @if(Auth::user()->isAdmin())
+                            <a href="{{ url('/teachers/'.$teach->id.'/edit') }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                              <i class="fa fa-pencil-alt"></i>
+                            </a>
 
-                          <button class="btn btn-sm btn-outline-danger" title="Delete"><i class="fa fa-trash"></i></button>
+                            <form method="POST" action="{{ url('/teachers/'.$teach->id) }}" style="display:inline">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure?')">
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </form>
+                          @endif
                         </div>
                       </td>
                     </tr>
                   @endforeach
-
                 </tbody>
               </table>
             </div>
@@ -60,7 +71,6 @@
     /* Custom hover effect for rows */
     .table-hover tbody tr:hover {
       background-color: rgba(16, 185, 129, 0.05);
-      /* Soft success green hover */
     }
 
     .btn-group .btn {

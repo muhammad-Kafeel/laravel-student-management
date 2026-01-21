@@ -43,15 +43,49 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
-    // Your Original Resource Routes (Now Protected!)
-    Route::resource('/students', StudentController::class);
-    Route::resource('/teachers', TeacherController::class);
-    Route::resource('/courses', CourseController::class);
 });
 
-// Admin Only Routes (Protected - Requires Admin Role)
+// Teacher & Admin Routes (View Only - Teachers and Admins can VIEW)
+Route::middleware(['auth', 'teacher'])->group(function () {
+    // Students - View Only (index and show) - Teachers and Admins can VIEW
+    Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+    Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
+    
+    // Teachers - View Only (index and show) - Teachers and Admins can VIEW
+    Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
+    Route::get('/teachers/{teacher}', [TeacherController::class, 'show'])->name('teachers.show');
+    
+    // Courses - View Only (index and show) - Teachers and Admins can VIEW
+    Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+    Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+});
+
+// Admin Only Routes (Full CRUD Access) - ONLY ADMINS can CREATE/EDIT/DELETE
 Route::middleware(['auth', 'admin'])->group(function () {
+    // Students - Create, Edit, Delete (Admin Only)
+    Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
+    Route::patch('/students/{student}', [StudentController::class, 'update'])->name('students.update');
+    Route::put('/students/{student}', [StudentController::class, 'update']);
+    Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+    
+    // Teachers - Create, Edit, Delete (Admin Only)
+    Route::get('/teachers/create', [TeacherController::class, 'create'])->name('teachers.create');
+    Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
+    Route::get('/teachers/{teacher}/edit', [TeacherController::class, 'edit'])->name('teachers.edit');
+    Route::patch('/teachers/{teacher}', [TeacherController::class, 'update'])->name('teachers.update');
+    Route::put('/teachers/{teacher}', [TeacherController::class, 'update']);
+    Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
+    
+    // Courses - Create, Edit, Delete (Admin Only)
+    Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
+    Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+    Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
+    Route::patch('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
+    Route::put('/courses/{course}', [CourseController::class, 'update']);
+    Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
+    
     // User Management Routes (Admin Panel)
     Route::resource('/users', UserController::class);
     

@@ -11,9 +11,11 @@
                     <li class="breadcrumb-item active" aria-current="page">Course Details</li>
                 </ol>
             </nav>
-            <a href="{{ url('/courses/' . $course->id . '/edit') }}" class="btn btn-primary btn-sm px-3 shadow-sm">
-                <i class="fas fa-edit mr-1"></i> Edit Course
-            </a>
+            @if(Auth::user()->isAdmin())
+                <a href="{{ url('/courses/' . $course->id . '/edit') }}" class="btn btn-primary btn-sm px-3 shadow-sm">
+                    <i class="fas fa-edit mr-1"></i> Edit Course
+                </a>
+            @endif
         </div>
 
         <div class="row">

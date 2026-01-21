@@ -6,9 +6,11 @@
         <h3 class="font-weight-bold">Students</h3>
         <p class="text-muted">Manage and view all registered students in the system.</p>
     </div>
-    <a href="{{ url('/students/create') }}" class="btn btn-primary shadow-sm">
-        <i class="fas fa-plus mr-2"></i> Add New Student
-    </a>
+    @if(Auth::user()->isAdmin())
+        <a href="{{ url('/students/create') }}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus mr-2"></i> Add New Student
+        </a>
+    @endif
 </div>
 
 @if(session('success'))
@@ -46,16 +48,18 @@
                             <a href="{{ url('/students/' . $item->id) }}" class="btn btn-sm btn-light border text-info mr-1" title="View">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ url('/students/' . $item->id . '/edit') }}" class="btn btn-sm btn-light border text-primary mr-1" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form method="POST" action="{{ url('/students/' . $item->id) }}" style="display:inline">
-                                {{ method_field('DELETE') }}
-                                {{ csrf_field() }}
-                                <button type="submit" class="btn btn-sm btn-light border text-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this record?')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
+                            @if(Auth::user()->isAdmin())
+                                <a href="{{ url('/students/' . $item->id . '/edit') }}" class="btn btn-sm btn-light border text-primary mr-1" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form method="POST" action="{{ url('/students/' . $item->id) }}" style="display:inline">
+                                    {{ method_field('DELETE') }}
+                                    {{ csrf_field() }}
+                                    <button type="submit" class="btn btn-sm btn-light border text-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this record?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
