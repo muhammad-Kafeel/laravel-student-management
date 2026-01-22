@@ -10,13 +10,24 @@ use Illuminate\View\View;              // Tool to render the HTML Blade files
 class StudentController extends Controller
 {
     /**
-     * 1. INDEX: Display a list of all students.
+     * 1. INDEX: Display a list of all students with search functionality.
      * Route: GET /students
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        // Fetch every student record from the database using Eloquent
-        $std = Student::all();
+        // Get search query from request
+        $search = $request->get('search');
+        
+        // If search query exists, filter students
+        if ($search) {
+            $std = Student::where('name', 'LIKE', "%{$search}%")
+                         ->orWhere('address', 'LIKE', "%{$search}%")
+                         ->orWhere('mobile', 'LIKE', "%{$search}%")
+                         ->get();
+        } else {
+            // Fetch all students if no search query
+            $std = Student::all();
+        }
         
         // Pass the student data to the 'students.index' view
         return view('students.index')->with('students', $std);

@@ -1,98 +1,103 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Enroll Student in Course') }}
-        </h2>
-    </x-slot>
+@extends('layout')
+@section('content')
 
-    <div class="py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <form action="{{ route('enrollments.store') }}" method="POST">
-                        @csrf
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
 
-                        <!-- Student Selection -->
-                        <div class="mb-4">
-                            <label for="student_id" class="block text-sm font-medium text-gray-700 mb-2">
-                                Select Student *
-                            </label>
-                            <select name="student_id" id="student_id" required
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
-                                <option value="">-- Choose a Student --</option>
-                                @foreach($students as $student)
-                                    <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
-                                        {{ $student->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('student_id')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-transparent p-0 mb-3">
+                <li class="breadcrumb-item"><a href="{{ route('enrollments.index') }}">Enrollments</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Enroll Student</li>
+            </ol>
+        </nav>
 
-                        <!-- Course Selection -->
-                        <div class="mb-4">
-                            <label for="course_id" class="block text-sm font-medium text-gray-700 mb-2">
-                                Select Course *
-                            </label>
-                            <select name="course_id" id="course_id" required
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
-                                <option value="">-- Choose a Course --</option>
-                                @foreach($courses as $course)
-                                    <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                                        {{ $course->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('course_id')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="mb-0 font-weight-bold">
+                    <i class="fas fa-user-plus mr-2 text-primary"></i>Enroll Student in Course
+                </h5>
+                <p class="text-muted small mb-0">Select a student and course to create enrollment</p>
+            </div>
 
-                        <!-- Enrollment Date -->
-                        <div class="mb-4">
-                            <label for="enrollment_date" class="block text-sm font-medium text-gray-700 mb-2">
-                                Enrollment Date *
-                            </label>
-                            <input type="date" name="enrollment_date" id="enrollment_date" 
-                                value="{{ old('enrollment_date', date('Y-m-d')) }}" required
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
-                            @error('enrollment_date')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
+            <div class="card-body p-4">
+                <form action="{{ route('enrollments.store') }}" method="POST">
+                    @csrf
 
-                        <!-- Status -->
-                        <div class="mb-4">
-                            <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                                Status *
-                            </label>
-                            <select name="status" id="status" required
-                                class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
-                                <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
-                                <option value="dropped" {{ old('status') == 'dropped' ? 'selected' : '' }}>Dropped</option>
-                            </select>
-                            @error('status')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <!-- Student Selection -->
+                    <div class="form-group mb-4">
+                        <label class="font-weight-600">Select Student *</label>
+                        <select name="student_id" class="form-control" required>
+                            <option value="">-- Choose a Student --</option>
+                            @foreach($students as $student)
+                                <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
+                                    {{ $student->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('student_id')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
 
-                        <!-- Buttons -->
-                        <div class="flex items-center justify-end mt-6">
-                            <a href="{{ route('enrollments.index') }}" 
-                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">
-                                Cancel
-                            </a>
-                            <button type="submit" 
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Enroll Student
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <!-- Course Selection -->
+                    <div class="form-group mb-4">
+                        <label class="font-weight-600">Select Course *</label>
+                        <select name="course_id" class="form-control" required>
+                            <option value="">-- Choose a Course --</option>
+                            @foreach($courses as $course)
+                                <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                                    {{ $course->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('course_id')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <!-- Enrollment Date -->
+                    <div class="form-group mb-4">
+                        <label class="font-weight-600">Enrollment Date *</label>
+                        <input type="date" name="enrollment_date" class="form-control" 
+                               value="{{ old('enrollment_date', date('Y-m-d')) }}" required>
+                        @error('enrollment_date')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-group mb-4">
+                        <label class="font-weight-600">Status *</label>
+                        <select name="status" class="form-control" required>
+                            <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                            <option value="dropped" {{ old('status') == 'dropped' ? 'selected' : '' }}>Dropped</option>
+                        </select>
+                        @error('status')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ route('enrollments.index') }}" class="btn btn-light border px-4">
+                            <i class="fas fa-arrow-left mr-2"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary px-5 shadow-sm">
+                            Enroll Student <i class="fas fa-check-circle ml-2"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+
+<style>
+    .font-weight-600 { font-weight: 600; color: #334155; margin-bottom: 8px; display: inline-block; }
+    .breadcrumb-item a { color: var(--primary-color); text-decoration: none; }
+    .breadcrumb-item.active { color: #64748b; }
+</style>
+
+@endsection

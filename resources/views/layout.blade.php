@@ -39,6 +39,7 @@
       z-index: 1030;
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
     }
 
     /* Sidebar state when hidden (Desktop) */
@@ -72,7 +73,7 @@
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      min-width: 0; /* Prevents flex items from overflowing */
+      min-width: 0;
     }
 
     .top-navbar {
@@ -91,6 +92,46 @@
       padding: 30px;
     }
 
+    /* Search Box Styling */
+    .search-box {
+      position: relative;
+      margin-right: 20px;
+    }
+
+    .search-box input {
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 8px 40px 8px 15px;
+      width: 250px;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-box button {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--primary-color);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .search-box button:hover {
+      background: #1d4ed8;
+    }
+
     /* Mobile Logic */
     @media (max-width: 768px) {
       .sidebar {
@@ -102,7 +143,11 @@
         left: 0;
       }
       #wrapper.sidebar-hidden .sidebar {
-        margin-left: 0; /* Reset desktop logic on mobile */
+        margin-left: 0;
+      }
+      .search-box input {
+        width: 180px;
+        font-size: 13px;
       }
     }
   </style>
@@ -121,17 +166,46 @@
       
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/dashboard') }}">
-            <i class="fas fa-home"></i> Home
+          <a class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}" href="{{ url('/dashboard') }}">
+            <i class="fas fa-home"></i> Dashboard
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link {{ Request::is('students*') ? 'active' : '' }}" href="{{ url('/students') }}">
-            <i class="fas fa-user-graduate"></i> Students
-          </a>
-        </li>
-        <li class="nav-item"><a class="nav-link {{ Request::is('teachers*') ? 'active' : '' }}" href="{{ url('/teachers') }}"><i class="fas fa-chalkboard-teacher"></i> Teachers</a></li>
-        <li class="nav-item"><a class="nav-link" {{ Request::is('courses*') ? 'active' : '' }} href="{{ url('/courses') }}"><i class="fas fa-book"></i> Courses</a></li>
+        
+        @if(Auth::user()->isAdmin() || Auth::user()->isTeacher())
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('students*') ? 'active' : '' }}" href="{{ url('/students') }}">
+              <i class="fas fa-user-graduate"></i> Students
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('teachers*') ? 'active' : '' }}" href="{{ url('/teachers') }}">
+              <i class="fas fa-chalkboard-teacher"></i> Teachers
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('courses*') ? 'active' : '' }}" href="{{ url('/courses') }}">
+              <i class="fas fa-book"></i> Courses
+            </a>
+          </li>
+        @endif
+        
+        @if(Auth::user()->isAdmin())
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('enrollments*') ? 'active' : '' }}" href="{{ url('/enrollments') }}">
+              <i class="fas fa-clipboard-list"></i> Enrollments
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('attendance*') ? 'active' : '' }}" href="{{ url('/attendance') }}">
+              <i class="fas fa-calendar-check"></i> Attendance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('users*') ? 'active' : '' }}" href="{{ url('/users') }}">
+              <i class="fas fa-users-cog"></i> Users
+            </a>
+          </li>
+        @endif
       </ul>
     </nav>
 
@@ -144,21 +218,34 @@
         <h5 class="mb-0 font-weight-bold d-none d-sm-block">Management System</h5>
 
         <div class="ml-auto d-flex align-items-center">
-          <form action="search" method="GET">
-            <input type="text" type="text" placeholder="Search Students">
-            <button type="submit">Search</button>
-          </form>
+          <!-- Search Box -->
+          @if(Auth::user()->isAdmin() || Auth::user()->isTeacher())
+            <form action="{{ url('/students') }}" method="GET" class="search-box">
+              <input type="text" name="search" placeholder="Search students..." value="{{ request('search') }}">
+              <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+          @endif
+
+          <!-- User Dropdown -->
           <div class="dropdown">
             <button class="btn btn-link dropdown-toggle d-flex align-items-center text-dark text-decoration-none" type="button" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <div class="text-right mr-3 d-none d-md-block">
                 <div class="font-weight-bold small text-dark">{{ Auth::user()->name }}</div>
-                <div class="text-muted" style="font-size: 10px;">Super Admin</div>
+                <div class="text-muted" style="font-size: 10px;">
+                  @if(Auth::user()->isAdmin())
+                    Admin
+                  @elseif(Auth::user()->isTeacher())
+                    Teacher
+                  @else
+                    Student
+                  @endif
+                </div>
               </div>
               <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=0D8ABC&color=fff" class="rounded-circle" width="40">
             </button>
             <div class="dropdown-menu dropdown-menu-right shadow border-0 mt-2" aria-labelledby="userMenu">
               <div class="dropdown-header">Manage Account</div>
-              <a class="dropdown-item" href="{{ url('/profile') }}">
+              <a class="dropdown-item" href="{{ route('profile.edit') }}">
                 <i class="fas fa-user-circle mr-2"></i> Profile
               </a>
               <div class="dropdown-divider"></div>
@@ -170,7 +257,6 @@
               </form>
             </div>
           </div>
-
         </div>
       </header>
 
