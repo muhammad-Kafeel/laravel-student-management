@@ -26,6 +26,7 @@ use App\Models\Enrollment;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('search',[App\Http\Controllers\UserController::class,'search']);
 
 // Dashboard Route (Protected - Requires Login)
 Route::get('/dashboard', function () {

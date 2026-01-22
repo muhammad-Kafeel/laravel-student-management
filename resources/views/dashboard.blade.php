@@ -1,131 +1,121 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layout')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
-            <!-- Error Message -->
-            @if(session('error'))
-                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                    <span class="block sm:inline">{{ session('error') }}</span>
+@section('content')
+<div class="container-fluid">
+    
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+    
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h3 class="font-weight-bold mb-1">Welcome, {{ Auth::user()->name }}!</h3>
+                    <p class="text-muted mb-0">You're logged in successfully.</p>
                 </div>
-            @endif
-            
-            <!-- Welcome Message -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 text-gray-900">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="text-2xl font-bold mb-2">Welcome, {{ Auth::user()->name }}!</h3>
-                            <p class="text-gray-600">You're logged in successfully.</p>
+                <div>
+                    @if(Auth::user()->isAdmin())
+                        <span class="badge badge-pill badge-success px-3 py-2">Admin</span>
+                    @elseif(Auth::user()->isTeacher())
+                        <span class="badge badge-pill badge-primary px-3 py-2">Teacher</span>
+                    @else
+                        <span class="badge badge-pill badge-secondary px-3 py-2">Student</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-light text-primary p-3 mr-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-graduate fa-2x"></i>
                         </div>
                         <div>
-                            @if(Auth::user()->isAdmin())
-                                <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full font-semibold">Admin</span>
-                            @elseif(Auth::user()->isTeacher())
-                                <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full font-semibold">Teacher</span>
-                            @else
-                                <span class="px-4 py-2 bg-gray-100 text-gray-800 rounded-full font-semibold">Student</span>
-                            @endif
+                            <p class="text-muted small font-weight-bold text-uppercase mb-0">Total Students</p>
+                            <h2 class="font-weight-bold mb-0">{{ $studentCount }}</h2>
                         </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-top">
+                        <a href="{{ url('/students') }}" class="text-primary font-weight-bold small text-decoration-none">
+                            View all students <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <!-- Students Card -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-blue-100 rounded-full p-3">
-                                <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Students</p>
-                                <p class="text-3xl font-bold text-gray-900">{{ $studentCount }}</p>
-                            </div>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-light text-success p-3 mr-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chalkboard-teacher fa-2x"></i>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ url('/students') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                View all students →
-                            </a>
+                        <div>
+                            <p class="text-muted small font-weight-bold text-uppercase mb-0">Total Teachers</p>
+                            <h2 class="font-weight-bold mb-0">{{ $teacherCount }}</h2>
                         </div>
                     </div>
-                </div>
-
-                <!-- Teachers Card -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-green-100 rounded-full p-3">
-                                <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Teachers</p>
-                                <p class="text-3xl font-bold text-gray-900">{{ $teacherCount }}</p>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <a href="{{ url('/teachers') }}" class="text-green-600 hover:text-green-800 text-sm font-medium">
-                                View all teachers →
-                            </a>
-                        </div>
+                    <div class="mt-3 pt-3 border-top">
+                        <a href="{{ url('/teachers') }}" class="text-success font-weight-bold small text-decoration-none">
+                            View all teachers <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Courses Card -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-purple-100 rounded-full p-3">
-                                <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Courses</p>
-                                <p class="text-3xl font-bold text-gray-900">{{ $courseCount }}</p>
-                            </div>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-light text-purple p-3 mr-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; color: #6f42c1;">
+                            <i class="fas fa-book fa-2x"></i>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ url('/courses') }}" class="text-purple-600 hover:text-purple-800 text-sm font-medium">
-                                View all courses →
-                            </a>
+                        <div>
+                            <p class="text-muted small font-weight-bold text-uppercase mb-0">Total Courses</p>
+                            <h2 class="font-weight-bold mb-0">{{ $courseCount }}</h2>
                         </div>
                     </div>
+                    <div class="mt-3 pt-3 border-top">
+                        <a href="{{ url('/courses') }}" class="font-weight-bold small text-decoration-none" style="color: #6f42c1;">
+                            View all courses <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Enrollments Card -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-orange-100 rounded-full p-3">
-                                <svg class="h-8 w-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600">Total Enrollments</p>
-                                <p class="text-3xl font-bold text-gray-900">{{ $enrollmentCount }}</p>
-                            </div>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-light text-warning p-3 mr-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-clipboard-list fa-2x"></i>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ url('/enrollments') }}" class="text-orange-600 hover:text-orange-800 text-sm font-medium">
-                                View all enrollments →
-                            </a>
+                        <div>
+                            <p class="text-muted small font-weight-bold text-uppercase mb-0">Enrollments</p>
+                            <h2 class="font-weight-bold mb-0">{{ $enrollmentCount }}</h2>
                         </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-top">
+                        <a href="{{ url('/enrollments') }}" class="text-warning font-weight-bold small text-decoration-none">
+                            View enrollments <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

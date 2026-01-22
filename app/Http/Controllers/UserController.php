@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB; // Add this to use the DB facade
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -78,5 +78,18 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+  public function search(Request $request)
+    {
+        // 1. Get the search query
+        $data = $request->input('search');
+
+        // 2. Perform the search (Using quotes around 'students' and fixing variable syntax)
+        $records = DB::table('students')
+                    ->where('name', 'like', '%' . $data . '%')
+                    ->get();
+
+        // 3. Return a specific view for search results
+        return view('users.search-results', compact('records', 'data'));
     }
 }

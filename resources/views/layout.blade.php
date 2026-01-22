@@ -144,11 +144,33 @@
         <h5 class="mb-0 font-weight-bold d-none d-sm-block">Management System</h5>
 
         <div class="ml-auto d-flex align-items-center">
-          <div class="text-right mr-3 d-none d-md-block">
-            <div class="font-weight-bold small">Admin User</div>
-            <div class="text-muted" style="font-size: 10px;">Super Admin</div>
+          <form action="search" method="GET">
+            <input type="text" type="text" placeholder="Search Students">
+            <button type="submit">Search</button>
+          </form>
+          <div class="dropdown">
+            <button class="btn btn-link dropdown-toggle d-flex align-items-center text-dark text-decoration-none" type="button" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div class="text-right mr-3 d-none d-md-block">
+                <div class="font-weight-bold small text-dark">{{ Auth::user()->name }}</div>
+                <div class="text-muted" style="font-size: 10px;">Super Admin</div>
+              </div>
+              <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=0D8ABC&color=fff" class="rounded-circle" width="40">
+            </button>
+            <div class="dropdown-menu dropdown-menu-right shadow border-0 mt-2" aria-labelledby="userMenu">
+              <div class="dropdown-header">Manage Account</div>
+              <a class="dropdown-item" href="{{ url('/profile') }}">
+                <i class="fas fa-user-circle mr-2"></i> Profile
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+              </a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+              </form>
+            </div>
           </div>
-          <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" class="rounded-circle" width="40">
+
         </div>
       </header>
 
