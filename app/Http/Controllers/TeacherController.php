@@ -46,6 +46,18 @@ class TeacherController extends Controller
     }
 
     /**
+     * SHOW: Display details of a specific teacher.
+     */
+    public function show(string $id): View
+    {
+        // 1. Find the teacher or fail with 404 if not found
+        $teacher = Teacher::findOrFail($id);
+
+        // 2. Load the show view and pass the teacher data
+        return view('teachers.show')->with('teacher', $teacher);
+    }
+
+    /**
      * EDIT: Find a specific teacher and show their details in an editable form.
      */
     public function edit(string $id): View

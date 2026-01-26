@@ -49,11 +49,11 @@ Route::middleware('auth')->group(function () {
 
 // Teacher & Admin Routes (View Only - Teachers and Admins can VIEW)
 Route::middleware(['auth', 'teacher'])->group(function () {
-    // Students - View Only (index and show) - Teachers and Admins can VIEW
+
+    // Students - View Only (index) - Teachers and Admins can VIEW
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
-    Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
-    
-    // Teachers - View Only (index and show) - Teachers and Admins can VIEW
+
+    // Teachers - View Only (index and show) - Teachers can VIEW
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
     Route::get('/teachers/{teacher}', [TeacherController::class, 'show'])->name('teachers.show');
     
@@ -64,6 +64,11 @@ Route::middleware(['auth', 'teacher'])->group(function () {
 
 // Admin Only Routes (Full CRUD Access) - ONLY ADMINS can CREATE/EDIT/DELETE
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    // ✅ ALLOW ADMIN TO VIEW TEACHERS LIST & PROFILE
+    Route::get('/teachers', [TeacherController::class, 'index']);
+    Route::get('/teachers/{teacher}', [TeacherController::class, 'show']);
+
     // Students - Create, Edit, Delete (Admin Only)
     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/students', [StudentController::class, 'store'])->name('students.store');
@@ -99,6 +104,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/attendance/mark', [AttendanceController::class, 'create'])->name('attendance.create');
     Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/{course}', [AttendanceController::class, 'show'])->name('attendance.show');
+});
+
+// Teacher & Admin Routes (View Only - Students SHOW)
+Route::middleware(['auth', 'teacher'])->group(function () {
+
+    // Students - View Only (show) - Teachers and Admins can VIEW
+    Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
+
 });
 
 // Authentication Routes (Login, Register, etc.)

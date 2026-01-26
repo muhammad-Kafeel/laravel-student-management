@@ -6,7 +6,7 @@
         
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-transparent p-0 mb-3">
-                <li class="breadcrumb-item"><a href="#">Teachers</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('/teachers') }}">Teachers</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Add Teacher</li>
             </ol>
         </nav>
@@ -55,7 +55,7 @@
                     <hr class="my-4">
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <a href="#" class="btn btn-light border px-4">Cancel</a>
+                        <a href="{{ url('/teachers') }}" class="btn btn-light border px-4">Cancel</a>
                         <button type="submit" class="btn btn-success px-5 shadow-sm font-weight-bold">
                             Save Teacher <i class="fas fa-check ml-2"></i>
                         </button>
