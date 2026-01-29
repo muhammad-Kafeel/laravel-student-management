@@ -101,6 +101,24 @@
             </div>
             <x-form-input name="duration" label="Course Duration" />
 
+            {{-- Teacher Selection Dropdown --}}
+            <div class="mb-3">
+                <label class="form-label">Assign Teacher (Optional)</label>
+                <select name="teacher_id" class="form-control @error('teacher_id') is-invalid @enderror">
+                    <option value="">-- Select a Teacher --</option>
+                    @foreach($teachers as $teacher)
+                        <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                            {{ $teacher->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('teacher_id')
+                    <div class="text-danger mt-1" style="font-size: 0.9rem;">
+                        <i class="fa fa-info-circle"></i> {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
             <button type="submit" class="btn btn-success">Save</button>
         </form>
 

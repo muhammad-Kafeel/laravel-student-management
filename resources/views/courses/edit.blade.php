@@ -28,7 +28,18 @@
         <label>Duration</label><br>
         <input type="text" name="duration" id="duration" value="{{$course->duration}}" class="form-control"><br>
         
-        {{-- 8. Update button --}}
+        {{-- 8. Teacher Selection Dropdown --}}
+        <label>Assign Teacher</label><br>
+        <select name="teacher_id" class="form-control">
+            <option value="">-- Select a Teacher --</option>
+            @foreach($teachers as $teacher)
+                <option value="{{ $teacher->id }}" {{ $course->teacher_id == $teacher->id ? 'selected' : '' }}>
+                    {{ $teacher->name }}
+                </option>
+            @endforeach
+        </select><br>
+        
+        {{-- 9. Update button --}}
         <input type="submit" value="Update" class="btn btn-success"><br>
     </form>
    

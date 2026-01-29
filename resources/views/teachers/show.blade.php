@@ -64,9 +64,51 @@
                     </div>
                     <div class="col-4">
                         <div class="small text-muted mb-1">Courses</div>
-                        <div class="font-weight-bold small text-dark">0 Enrolled</div>
+                        <div class="font-weight-bold small text-dark">{{ $teacher->courses->count() }} Enrolled</div>
                     </div>
                 </div>
+
+                <!-- Courses Taught Section -->
+                @if($teacher->courses->count() > 0)
+                <hr class="my-4 opacity-50">
+                
+                <div class="mb-3">
+                    <h5 class="font-weight-bold text-dark mb-3">
+                        <i class="fas fa-chalkboard-teacher text-primary mr-2"></i> Courses Teaching
+                    </h5>
+                    
+                    <div class="row">
+                        @foreach($teacher->courses as $course)
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="font-weight-bold mb-0">{{ $course->name }}</h6>
+                                        <span class="badge badge-primary badge-pill">{{ $course->duration }}</span>
+                                    </div>
+                                    <p class="text-muted small mb-2">{{ Str::limit($course->syllabus, 80) }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="fas fa-users mr-1"></i> 
+                                            {{ $course->students->count() }} Students
+                                        </small>
+                                        <a href="{{ url('/courses/'.$course->id) }}" class="btn btn-sm btn-outline-primary">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @else
+                <hr class="my-4 opacity-50">
+                <div class="text-center py-4">
+                    <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No courses assigned yet.</p>
+                </div>
+                @endif
             </div>
 
             <div class="card-footer bg-white border-top-0 pb-4 px-4 text-center">

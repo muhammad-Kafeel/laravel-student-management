@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 // --- Imports: Bringing in the necessary tools ---
 use App\Models\Course;             // Connects to the 'courses' table in your database
+use App\Models\Teacher;            // Added: To fetch teachers for dropdown
 use Illuminate\Http\RedirectResponse; // Tool used to send users to a different page after an action
 use Illuminate\Http\Request;          // Tool that captures data sent from forms
 use Illuminate\View\View;             // Tool used to render and display HTML pages
@@ -29,8 +30,11 @@ class CourseController extends Controller
      */
     public function create(): View
     {
-        // Simply displays the 'create.blade.php' form file
-        return view('courses.create');
+        // Fetch all teachers for the dropdown
+        $teachers = Teacher::all();
+        
+        // Pass teachers to the view
+        return view('courses.create')->with('teachers', $teachers);
     }
 
 /**
@@ -40,14 +44,16 @@ class CourseController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name'     => 'required|regex:/^[a-zA-Z\s\-]+$/|max:255',
-            'syllabus' => 'required|string|min:20|not_regex:/^[0-9\s]+$/',
-            'duration' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'name'       => 'required|regex:/^[a-zA-Z\s\-]+$/|max:255',
+            'syllabus'   => 'required|string|min:20|not_regex:/^[0-9\s]+$/',
+            'duration'   => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'teacher_id' => 'nullable|exists:teachers,id', // Added: Validate teacher exists
         ], [
             'name.regex'         => 'The course name should only contain letters and spaces.',
             'syllabus.min'       => 'Please provide a more detailed syllabus (at least 20 characters).',
             'syllabus.not_regex' => 'The syllabus cannot consist of only numbers.',
             'duration.regex'     => 'Duration should be like "6 Months" or "12 Weeks".',
+            'teacher_id.exists'  => 'Please select a valid teacher.',
         ]);
 
         Course::create($request->all());
@@ -75,9 +81,12 @@ public function show(string $id): View
     {
         // 1. Retrieve the existing data so the form can be pre-filled
         $course = Course::find($id);
+        
+        // 2. Fetch all teachers for the dropdown
+        $teachers = Teacher::all();
 
-        // 2. Send that data to 'edit.blade.php'
-        return view('courses.edit')->with('course', $course);
+        // 3. Send that data to 'edit.blade.php'
+        return view('courses.edit')->with(['course' => $course, 'teachers' => $teachers]);
     }
 
     /**
@@ -87,9 +96,10 @@ public function show(string $id): View
     {
         // 1. ADDED VALIDATION HERE: Prevents bad data during an EDIT
         $request->validate([
-            'name'     => 'required|regex:/^[a-zA-Z\s\-]+$/|max:255',
-            'syllabus' => 'required|string|min:20|not_regex:/^[0-9\s]+$/',
-            'duration' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'name'       => 'required|regex:/^[a-zA-Z\s\-]+$/|max:255',
+            'syllabus'   => 'required|string|min:20|not_regex:/^[0-9\s]+$/',
+            'duration'   => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'teacher_id' => 'nullable|exists:teachers,id', // Added: Validate teacher exists
         ]);
 
         $course = Course::findOrFail($id);

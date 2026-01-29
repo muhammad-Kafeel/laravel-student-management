@@ -51,9 +51,10 @@ class TeacherController extends Controller
     public function show(string $id): View
     {
         // 1. Find the teacher or fail with 404 if not found
-        $teacher = Teacher::findOrFail($id);
+        // 2. Load the courses relationship using eager loading
+        $teacher = Teacher::with('courses')->findOrFail($id);
 
-        // 2. Load the show view and pass the teacher data
+        // 3. Load the show view and pass the teacher data
         return view('teachers.show')->with('teacher', $teacher);
     }
 
