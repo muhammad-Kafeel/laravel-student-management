@@ -16,6 +16,20 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Address -->
+        <div class="mt-4">
+            <x-input-label for="address" :value="__('Address')" />
+            <x-text-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" required />
+            <x-input-error :messages="$errors->get('address')" class="mt-2" />
+        </div>
+
+        <!-- Mobile -->
+        <div class="mt-4">
+            <x-input-label for="mobile" :value="__('Mobile Number')" />
+            <x-text-input id="mobile" class="block mt-1 w-full" type="text" name="mobile" :value="old('mobile')" required />
+            <x-input-error :messages="$errors->get('mobile')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
@@ -37,6 +51,34 @@
                             name="password_confirmation" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <!-- Course Selection -->
+        <div class="mt-4">
+            <x-input-label for="courses" :value="__('Select Courses (Optional)')" />
+            <div class="mt-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
+                @if(isset($courses) && $courses->count() > 0)
+                    @foreach($courses as $course)
+                        <div class="flex items-center mb-2">
+                            <input 
+                                type="checkbox" 
+                                id="course_{{ $course->id }}" 
+                                name="courses[]" 
+                                value="{{ $course->id }}"
+                                {{ in_array($course->id, old('courses', [])) ? 'checked' : '' }}
+                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                            />
+                            <label for="course_{{ $course->id }}" class="ml-2 text-sm text-gray-700">
+                                {{ $course->name }} - {{ $course->duration }}
+                            </label>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-sm text-gray-500">No courses available at the moment.</p>
+                @endif
+            </div>
+            <p class="mt-1 text-sm text-gray-500">You can select multiple courses you want to enroll in.</p>
+            <x-input-error :messages="$errors->get('courses')" class="mt-2" />
         </div>
 
         <div class="flex items-center justify-end mt-4">

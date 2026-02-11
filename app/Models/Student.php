@@ -10,7 +10,15 @@ class Student extends Model
     use HasFactory;
     protected $table = 'students';
     protected $primaryKey = 'id';
-    protected $fillable = ['name','address','mobile'];
+    protected $fillable = ['name','address','mobile','user_id'];
+    
+    /**
+     * Relationship: Student belongs to a User
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
     /**
      * Relationship: Student has many Enrollments

@@ -65,4 +65,12 @@ class User extends Authenticatable
     {
         return $this->role === 'student';
     }
+    
+    /**
+     * Relationship: User has one Student profile
+     */
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
 }

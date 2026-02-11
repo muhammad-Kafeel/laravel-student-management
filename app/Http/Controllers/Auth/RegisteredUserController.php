@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Student;
+use App\Models\Course;
+use App\Models\Enrollment;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +23,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        // Get all available courses for selection during registration
+        $courses = Course::all();
+        return view('auth.register', compact('courses'));
     }
 
     /**
@@ -34,13 +39,39 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'address' => ['required', 'string', 'max:255'],
+            'mobile' => ['required', 'string', 'max:20'],
+            'courses' => ['nullable', 'array'],
+            'courses.*' => ['exists:courses,id'],
         ]);
 
+        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'student', // Set default role as student
         ]);
+
+        // Create student profile linked to the user
+        $student = Student::create([
+            'user_id' => $user->id,
+            'name' => $request->name,
+            'address' => $request->address,
+            'mobile' => $request->mobile,
+        ]);
+
+        // Enroll student in selected courses
+        if ($request->has('courses') && !empty($request->courses)) {
+            foreach ($request->courses as $courseId) {
+                Enrollment::create([
+                    'student_id' => $student->id,
+                    'course_id' => $courseId,
+                    'enrollment_date' => now(),
+                    'status' => 'active',
+                ]);
+            }
+        }
 
         event(new Registered($user));
 
