@@ -218,10 +218,15 @@
         <h5 class="mb-0 font-weight-bold d-none d-sm-block">Management System</h5>
 
         <div class="ml-auto d-flex align-items-center">
-          <!-- Search Box -->
+
+          {{-- ======================================================
+               GLOBAL SEARCH BOX
+               - Visible on ALL pages for Admin & Teacher
+               - Searches Students, Teachers, and Courses at once
+          ====================================================== --}}
           @if(Auth::user()->isAdmin() || Auth::user()->isTeacher())
-            <form action="{{ url('/students') }}" method="GET" class="search-box">
-              <input type="text" name="search" placeholder="Search students..." value="{{ request('search') }}">
+            <form action="{{ url('/search') }}" method="GET" class="search-box">
+              <input type="text" name="query" placeholder="Search students, teachers, courses..." value="{{ request('query') }}">
               <button type="submit"><i class="fas fa-search"></i></button>
             </form>
           @endif

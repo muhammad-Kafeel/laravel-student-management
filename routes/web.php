@@ -9,6 +9,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\GlobalSearchController; // Global Search across Students, Teachers, Courses
 
 // --- Model Imports ---
 use App\Models\Course;
@@ -26,7 +27,7 @@ use App\Models\Enrollment;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('search',[App\Http\Controllers\UserController::class,'search']);
+Route::get('/search', [GlobalSearchController::class, 'search'])->middleware(['auth'])->name('search'); // Global search (Students + Teachers + Courses)
 
 // Dashboard Route (Protected - Requires Login)
 Route::get('/dashboard', function () {
